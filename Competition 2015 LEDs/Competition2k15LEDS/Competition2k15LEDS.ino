@@ -6,10 +6,12 @@ CRGB leds[NUM_LEDS];
 #define DATA_PIN 3
 #define CLOCK_PIN 4
 #define MAX_BRIGHTNESS 255
-#define LEFT_SET_START 0
-#define LEFT_SET_END 39
-#define RIGHT_SET_START 41
-#define RIGHT_SET_END 78
+#define LEFT_START 0
+#define LEFT_END 33
+#define MID_START 34
+#define MID_END 43
+#define RIGHT_START 44
+#define RIGHT_END 78
 
 unsigned int mode = 1;
 
@@ -23,29 +25,29 @@ void loop() {
   {
     case 0:
       for(int i=4; i>0; i--){
-        two_color_bounce(CRGB::Green, CRGB::Yellow, 30);
-        two_color_bounce(CRGB::Yellow, CRGB::Purple, 30);
-        two_color_bounce(CRGB::Purple, CRGB::Green, 30);
+        two_color_bounce(CRGB::Red, CRGB::Blue, 30);
+        two_color_bounce(CRGB::Blue, CRGB::White, 30);
+        two_color_bounce(CRGB::White, CRGB::Red, 30);
       }
       break;
     case 1:
       for(int i=2; i>0; i--){
-        color_fade(CRGB::Green, CRGB::Purple, 5);
-        color_fade(CRGB::Purple, CRGB::Yellow, 5);
-        color_fade(CRGB::Yellow, CRGB::Green, 5);
+        color_fade(CRGB::Red, CRGB::White, 5);
+        color_fade(CRGB::White, CRGB::Blue, 5);
+        color_fade(CRGB::Blue, CRGB::Red, 5);
       }
       break;
     case 2:
       for(int i=2; i>0; i--){
-        three_pair(CRGB::Green, CRGB::Purple, CRGB::Yellow, 10);
+        three_pair(CRGB::Red, CRGB::White, CRGB::Blue, 10);
         three_pair_off(10);
       }
       break;
     case 3:
       for(int i=1; i>0; i--){
-        three_train(CRGB::Green, CRGB::Purple, CRGB::Yellow, 15);
-        three_train(CRGB::Purple, CRGB::Yellow, CRGB::Green, 15);
-        three_train(CRGB::Yellow, CRGB::Green, CRGB::Purple, 15);
+        three_train(CRGB::Red, CRGB::White, CRGB::Blue, 15);
+        three_train(CRGB::White, CRGB::Blue, CRGB::Red, 15);
+        three_train(CRGB::Blue, CRGB::Red, CRGB::White, 15);
       }
       break;
   }
@@ -131,23 +133,5 @@ void three_pair_off(uint8_t time)
 }
 
 void three_train(uint32_t a, uint32_t b, uint32_t c, uint8_t del){
-  for(int i = 0; i<NUM_LEDS+8; i++){
-    for(int j = 0; i<3; i++){
-      if(i-j>0&&i-j<NUM_LEDS){
-        leds[i-j] = a;
-      }
-    }
-    for(int j = 3; i<6; i++){
-      if(i-j>0&&i-j<NUM_LEDS){
-        leds[i-j] = b;
-      }
-    }
-    for(int j = 6; i<9; i++){
-      if(i-j>0&&i-j<NUM_LEDS){
-        leds[i-j] = c;
-      }
-    }
-  delay(del);
-  FastLED.show();
-  }
+  //FIX LATER
 }
