@@ -9,11 +9,11 @@ CRGB leds[NUM_LEDS];
 #define LEFT_START 0
 #define LEFT_END 33
 #define MID_START 34
-#define MID_END 43
-#define RIGHT_START 44
+#define MID_END 44
+#define RIGHT_START 45
 #define RIGHT_END 78
 
-unsigned int mode = 1;
+unsigned int mode = 3;
 
 void setup() {
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
@@ -44,10 +44,10 @@ void loop() {
       }
       break;
     case 3:
-      for(int i=1; i>0; i--){
-        three_train(CRGB::Red, CRGB::White, CRGB::Blue, 15);
-        three_train(CRGB::White, CRGB::Blue, CRGB::Red, 15);
-        three_train(CRGB::Blue, CRGB::Red, CRGB::White, 15);
+      for(int i=3; i>0; i--){
+        sided_strip(CRGB::Red, 15);
+        sided_strip(CRGB::White, 15);
+        sided_strip(CRGB::Blue, 15);
       }
       break;
   }
@@ -134,4 +134,13 @@ void three_pair_off(uint8_t time)
 
 void three_train(uint32_t a, uint32_t b, uint32_t c, uint8_t del){
   //FIX LATER
+}
+
+void sided_strip(uint32_t a, uint8_t del){
+  for(int i = 0; i<LEFT_END+1; i++){
+    leds[i] = a;
+    leds[NUM_LEDS - 1 - i] = a;
+    FastLED.show();
+    delay(del);
+  }
 }
