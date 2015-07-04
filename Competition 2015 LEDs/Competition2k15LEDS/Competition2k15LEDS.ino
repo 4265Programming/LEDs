@@ -39,7 +39,7 @@ void loop() {
       break;
     case 2:
       for(int i=2; i>0; i--){
-        three_pair(CRGB::Red, CRGB::White, CRGB::Blue, 10);
+        three_pair(CRGB::Red, CRGB::White, CRGB::Blue, 15);
         three_pair_off(10);
       }
       break;
@@ -50,9 +50,32 @@ void loop() {
         sided_strip(CRGB::Blue, 15);
       }
       break;
+    case 4:
+      for(int i=4; i>0; i--){
+        cylon(45);
+      }
+      break;
+    case 5:
+      stripped_led_fight(CRGB::Red, CRGB::White, 10);
+      stripped_led_fight(CRGB::White, CRGB::Blue, 10);
+      stripped_led_fight(CRGB::Blue, CRGB::Red, 10);
+      stripped_led_fight(CRGB::Red, CRGB::Blue, 10);
+      stripped_led_fight(CRGB::Blue, CRGB::White, 10);
+      stripped_led_fight(CRGB::White, CRGB::Red, 10);
+      break;
+    case 6:
+      for(int i=2; i>0; i--){
+        fade_ripple(CRGB::Red, 10);
+        fade_ripple(CRGB::White, 10);
+        fade_ripple(CRGB::Blue, 10);
+      }
+      break;
   }
+  delay(250);
+  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  delay(250);
   mode++;
-  if(mode>3){
+  if(mode>6){
     mode=0;
   }
 }
@@ -132,15 +155,74 @@ void three_pair_off(uint8_t time)
   delay(50);
 }
 
-void three_train(uint32_t a, uint32_t b, uint32_t c, uint8_t del){
-  //FIX LATER
-}
-
 void sided_strip(uint32_t a, uint8_t del){
   for(int i = 0; i<LEFT_END+1; i++){
     leds[i] = a;
     leds[NUM_LEDS - 1 - i] = a;
     FastLED.show();
     delay(del);
+  }
+}
+
+void cylon(uint8_t del){ //0.5 second across
+  int prev = MID_START;
+  for(int i=MID_START; i<MID_END; i++){
+    leds[prev] = CRGB::Black;
+    leds[i] = CRGB::Red;
+    prev = i;
+    FastLED.show();
+    delay(del);
+  }
+  delay(del*2);
+  for(int i=MID_END; i>MID_START; i--){
+    leds[prev] = CRGB::Black;
+    leds[i] = CRGB::Red;
+    prev = i;
+    FastLED.show();
+    delay(del);
+  }
+}
+
+void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
+  fill_solid(leds, NUM_LEDS, a);
+  FastLED.show();
+  delay(del);
+  for(int j = 0; j<LEFT_END; j++){
+    leds[j] = b;
+    leds[NUM_LEDS-1-j] = b;
+    FastLED.show();
+    delay(del);
+  }
+  for(int j = LEFT_END; j>0; j++){
+    leds[j] = a;
+    leds[NUM_LEDS-1-j] = a;
+    FastLED.show();
+    delay(del);
+  }
+}
+
+void fade_ripple(uint32_t a, uint8_t del){
+  for(int i=-7; i<7+NUM_LEDS; i++){
+    setRespective(a, i);
+    FastLED.show();
+    delay(del);
+  }
+}
+
+void setRespective(uint32_t color, int index){
+  for(int i = 0; i<6; i++){
+    int bright = color;
+    if(i == 0 || i==6){
+      bright = color/4;
+    }
+    if(i == 1 || i==5){
+      bright = color/2;
+    }
+    if(i==2 || i==4){
+      bright = (3*color)/4;
+    }
+    if(!(i+index<0)&&!(i+index>NUM_LEDS)){
+      leds[i+index] = bright;
+    }
   }
 }
