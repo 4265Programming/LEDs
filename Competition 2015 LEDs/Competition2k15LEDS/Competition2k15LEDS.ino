@@ -70,6 +70,10 @@ void loop() {
         fade_ripple(CRGB::Blue, 10);
       }
       break;
+    case 7:
+      for(int i=2; i>0; i--){
+        gradient(4);
+      }
   }
   delay(250);
   fill_solid(leds, NUM_LEDS, CRGB::Black);
@@ -224,5 +228,32 @@ void setRespective(uint32_t color, int index){
     if(!(i+index<0)&&!(i+index>NUM_LEDS)){
       leds[i+index] = bright;
     }
+  }
+}
+
+void gradient(uint8_t del){
+  int color = 0xFF0000
+  FastLED.show();
+  delay(del);
+  for(int i=0; i<255; i++){
+    color = color + (i*0x000001) - (i*0x010000);
+    FastLED.show();
+    delay(del);
+  }
+  color = 0x0000FF;
+  FastLED.show();
+  delay(del);
+  for(int i=0; i<255; i++){
+    color = color + (i*0x010100)
+    FastLED.show();
+    delay(del);
+  }
+  color = 0xFFFFFF;
+  FastLED.show();
+  delay(del);
+  for(int i=0; i<255; i++){
+    color = color - (i*0x000101);
+    FastLED.show();
+    delay(del);
   }
 }
