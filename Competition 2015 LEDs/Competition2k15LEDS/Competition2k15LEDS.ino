@@ -17,6 +17,11 @@ CRGB leds[NUM_LEDS];
 
 unsigned int mode = 3;
 
+int cylonLED[11]
+
+unsigned int cylonPos = 0;
+bool cylonDir = false //false referes to Left, true is Right
+
 static struct pt pt1, pt2;
 
 void setup() {
@@ -27,18 +32,21 @@ void setup() {
 }
 
 static int threadCylon(){
-  PT_BEGIN(pt)
+  PT_BEGIN(pt);
+  int interval = 100;
+  int timestamp;
   while(1) {
-    PT_WAIT_UNTIL(pt, updateCylon());
+    PT_WAIT_UNTIL(pt, millis() - timestamp > interval);
+    updateCylon();
   }
-  PT_END(pt)
+  PT_END(pt);
 }
 static int threadStrips(){
-  PT_BEGIN(pt)
+  PT_BEGIN(pt);
   while(1) {
     PT_WAIT_UNTIL(pt, updateStrips());
   }
-  PT_END(pt)
+  PT_END(pt);
 }
 
 void loop(){
@@ -46,7 +54,32 @@ void loop(){
   threadStrips(&pt2);
 }
 
+void mergeCylonArrayAndWholeAndUpdate(int pos){
+    leds[pos+34] = cylonArray(pos);
+}
+
+void updateCylon(){
+  if(!cylonDir){
+    previous = cylonPos;
+    if(previous>11){
+      cylonDir = true;
+      cylonPos = 10;
+    }else{
+      cylonPos++;
+    }
+  }else{
+    previous = cylonPos;
+    if(previous<0){
+      cylonDir = false;
+      cylonPos = 1;
+    }else{
+      cylonPos--;
+    }
+  }
+}
+
 boolean updateStrips(){
+  
   switch(mode){
     case 0:
         
