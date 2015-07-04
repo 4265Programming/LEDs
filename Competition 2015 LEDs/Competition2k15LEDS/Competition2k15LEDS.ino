@@ -21,7 +21,7 @@ void setup() {
 }
 
 void loop() {
-  switch(mode)
+  switch(mode) // TODO: Add gradient_fade, and random other file to do full color scale gradients
   {
     case 0:
       for(int i=4; i>0; i--){
