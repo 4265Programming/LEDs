@@ -232,7 +232,7 @@ void setRespective(uint32_t color, int index){
 }
 
 void gradient(uint8_t del){
-  int color = 0xFF0000
+  int color = 0xFF0000;
   FastLED.show();
   delay(del);
   for(int i=0; i<255; i++){
@@ -244,7 +244,7 @@ void gradient(uint8_t del){
   FastLED.show();
   delay(del);
   for(int i=0; i<255; i++){
-    color = color + (i*0x010100)
+    color = color + (i*0x010100);
     FastLED.show();
     delay(del);
   }
