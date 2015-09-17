@@ -16,12 +16,16 @@ CRGB leds[NUM_LEDS];
 unsigned int mode = 3;
 
 void setup() {
+  //Initializes FastLED with the Comm type, pin for data, pin for clock, and an array of LEDs
+  //Leave the comm type as WS2801, unless there is some reason not to (e.g. Too many LEDs, Different variety)
+  //Documentation on what comm type to use can be found in the FastLED documentation, or on the manufacturer's website
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);
   Serial.begin(9600);
 }
 
 void loop() {
-  switch(mode) // TODO: Add gradient_fade, and random other file to do full color scale gradients
+  //Basical looping structure that alternates through different cycles. Each case is a different effect.
+  switch(mode)
   {
     case 0:
       for(int i=4; i>0; i--){
@@ -75,6 +79,7 @@ void loop() {
         gradient(4);
       }
   }
+  //provides a temporary pause between the cycles
   delay(250);
   fill_solid(leds, NUM_LEDS, CRGB::Black);
   delay(250);
@@ -84,6 +89,7 @@ void loop() {
   }
 }
 
+//sends 2 different colors across opposing sides of the strip, taking over each other when they meet.
 void two_color_bounce(uint32_t colorLeft, uint32_t colorRight, uint8_t del)
 {
   FastLED.setBrightness(MAX_BRIGHTNESS);
@@ -101,6 +107,8 @@ void two_color_bounce(uint32_t colorLeft, uint32_t colorRight, uint8_t del)
   }
 }
 
+//Sets all the LEDs of full brightness on fadeOutColor, fades out for a duration of 255*del, then sets to fadeInColor
+//and fades in for the same duration 255*del
 void color_fade(uint32_t fadeOutColor, uint32_t fadeInColor, uint8_t del){
   fill_solid(leds, NUM_LEDS, fadeOutColor);
   FastLED.setBrightness(MAX_BRIGHTNESS);
@@ -118,6 +126,8 @@ void color_fade(uint32_t fadeOutColor, uint32_t fadeInColor, uint8_t del){
   }
 }
 
+//Sets every third LED to colorA, every third LED (offset 1) to colorB, and every third LED (Offset 2) to colorC
+//One LED turns on every time milliseconds
 void three_pair(uint32_t colorA, uint32_t colorB, uint32_t colorC, uint8_t time)
 {
   fill_solid(leds, NUM_LEDS, CRGB::Black);
@@ -138,7 +148,8 @@ void three_pair(uint32_t colorA, uint32_t colorB, uint32_t colorC, uint8_t time)
   }
   delay(50);
 }
-
+//does the opposite of the above method.
+//TODO merge with above method.
 void three_pair_off(uint8_t time)
 {
   for(int i = 0; i<NUM_LEDS; i+=3){
@@ -168,6 +179,7 @@ void sided_strip(uint32_t a, uint8_t del){
   }
 }
 
+
 void cylon(uint8_t del){ //0.5 second across
   int prev = MID_START;
   for(int i=MID_START; i<MID_END; i++){
@@ -187,6 +199,8 @@ void cylon(uint8_t del){ //0.5 second across
   }
 }
 
+//This method is specific to the 2015 Robot.
+//TODO Provide better documentation
 void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
   fill_solid(leds, NUM_LEDS, a);
   FastLED.show();
@@ -205,6 +219,8 @@ void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
   }
 }
 
+//sends out a "pulse" on the LED strip 7 leds long. center LED is full brightness,
+//each consecutive one outward is 3/4, 2/4 and 1/4 brightness, respectively
 void fade_ripple(uint32_t a, uint8_t del){
   for(int i=-7; i<7+NUM_LEDS; i++){
     setRespective(a, i);
@@ -212,7 +228,7 @@ void fade_ripple(uint32_t a, uint8_t del){
     delay(del);
   }
 }
-
+//Helper method for the above function that assigned brightnesses to the septet of LEDs
 void setRespective(uint32_t color, int index){
   for(int i = 0; i<6; i++){
     int bright = color;
@@ -231,6 +247,8 @@ void setRespective(uint32_t color, int index){
   }
 }
 
+
+//Broken at the moment. Do not use. If you do, post an epilepsy warning first. Will fix. Soon.
 void gradient(uint8_t del){
   int color = 0xFF0000;
   FastLED.show();
