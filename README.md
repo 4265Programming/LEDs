@@ -1,5 +1,5 @@
 # LEDs
-This is the repository for all of the LED Arduino Programs.
+This is the repository for all of the LED Arduino Programs used by FRC Team 4265.
 
 Currently working on adding documentation to all of the projects in here.
 
