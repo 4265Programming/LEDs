@@ -5,3 +5,5 @@ Currently working on adding documentation to all of the projects in here.
 
 For documentation of the usage of FastLED itself, head over to http://fastled.io/. FastLED is required in the sketch in order for these projects to properly compile.
 
+The protothread branch is an experimental brach to atttempt to use the protothread libraries for multiple LED functions simultaneously. You can find proto thread article and download at http://goo.gl/YVuDyw.
+
