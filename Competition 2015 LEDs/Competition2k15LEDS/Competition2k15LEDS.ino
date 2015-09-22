@@ -222,7 +222,7 @@ void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
 //sends out a "pulse" on the LED strip 7 leds long. center LED is full brightness,
 //each consecutive one outward is 3/4, 2/4 and 1/4 brightness, respectively
 //
-//Does not work with Reds at the moment, will debug
+//Should work with reds now. Testing needed.
 void fade_ripple(uint32_t a, uint8_t del){
   for(int i=-7; i<7+NUM_LEDS; i++){
     setRespective(a, i);
@@ -262,4 +262,32 @@ void gradient(uint8_t del){
     FastLED.show();
     delay(del);
   }
+}
+
+//WIP. Does a HSV gradient along all the LEDs in a wave movement.
+//bool looksNeat = !false;
+void gradient_wav(uint8_t del){
+  CHSV color;
+  color.saturation = 255;
+  color.value = 255;
+  //For loop that manages the "wave" format/movement
+  for(int duration = 0; duration<NUM_LEDS; duration++){
+    //Loop for setting each individual LED for a cycle
+    for(int pos=0; pos<NUM_LEDS; pos++){
+      color.hue=offsetVal(pos,duration,255);
+      hsv2rgb_spectrum(color, leds[pos]);
+    }
+    FastLED.show();
+    delay(del);
+  }
+}
+
+//Returns a value for the color based on it's current position in line
+// and the requested offset
+int offsetVal(int pos, int offset, int maximum){
+  int returnVal = pos+offset;
+  if(offset>maximum){
+    returnVal -= maximum;  
+  }
+  return returnVal;
 }
