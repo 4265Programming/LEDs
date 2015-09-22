@@ -235,13 +235,13 @@ void setRespective(uint32_t color, int index){
   for(int i = 0; i<6; i++){
     int bright = color;
     if(i == 0 || i==6){
-      bright = color/4;
+      bright = round(color/0x000004);
     }
     if(i == 1 || i==5){
-      bright = color/2;
+      bright = round(color/0x000002);
     }
     if(i==2 || i==4){
-      bright = (3*color)/4;
+      bright = round((0x000003*color)/0x000004);
     }
     if(!(i+index<0)&&!(i+index>NUM_LEDS)){
       leds[i+index] = bright;
@@ -249,17 +249,17 @@ void setRespective(uint32_t color, int index){
   }
 }
 
-
-//Broken at the moment. Do not use. If you do, post an epilepsy warning first. Will fix. Soon.
+//Does a standard HSV gradient on all LEDs simultaneously
 void gradient(uint8_t del){
   CHSV color;
-  color.hue = 0
-  color.saturation = 255
-  color.value = 255
+  color.hue = 0;
+  color.saturation = 255;
+  color.value = 255;
   for(int i = 0; i<255; i++){
     for(int j = 0; j<NUM_LEDS; j++){
       hsv2rgb_raw(color, leds[j]);
     }
     FastLED.show();
+    delay(del);
   }
 }
