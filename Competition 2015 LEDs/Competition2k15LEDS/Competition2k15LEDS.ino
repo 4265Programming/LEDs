@@ -199,7 +199,7 @@ void cylon(uint8_t del){ //0.5 second across
   }
 }
 
-//This method is specific to the 2015 Robot.
+//This method is specific to the LED setup on the 2015 Robot.
 //TODO Provide better documentation
 void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
   fill_solid(leds, NUM_LEDS, a);
@@ -221,6 +221,8 @@ void stripped_led_fight(uint32_t a, uint32_t b, uint8_t del){
 
 //sends out a "pulse" on the LED strip 7 leds long. center LED is full brightness,
 //each consecutive one outward is 3/4, 2/4 and 1/4 brightness, respectively
+//
+//Does not work with Reds at the moment, will debug
 void fade_ripple(uint32_t a, uint8_t del){
   for(int i=-7; i<7+NUM_LEDS; i++){
     setRespective(a, i);
@@ -250,28 +252,14 @@ void setRespective(uint32_t color, int index){
 
 //Broken at the moment. Do not use. If you do, post an epilepsy warning first. Will fix. Soon.
 void gradient(uint8_t del){
-  int color = 0xFF0000;
-  FastLED.show();
-  delay(del);
-  for(int i=0; i<255; i++){
-    color = color + (i*0x000001) - (i*0x010000);
+  CHSV color;
+  color.hue = 0
+  color.saturation = 255
+  color.value = 255
+  for(int i = 0; i<255; i++){
+    for(int j = 0; j<NUM_LEDS; j++){
+      hsv2rgb_raw(color, leds[j]);
+    }
     FastLED.show();
-    delay(del);
-  }
-  color = 0x0000FF;
-  FastLED.show();
-  delay(del);
-  for(int i=0; i<255; i++){
-    color = color + (i*0x010100);
-    FastLED.show();
-    delay(del);
-  }
-  color = 0xFFFFFF;
-  FastLED.show();
-  delay(del);
-  for(int i=0; i<255; i++){
-    color = color - (i*0x000101);
-    FastLED.show();
-    delay(del);
   }
 }
